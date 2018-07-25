@@ -1,0 +1,578 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>2.8 梯度赌博机算法 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+    <link rel="prev" href="2-7_UCB_action_selection.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../../">
+            
+                <a href="../../../">
+            
+                    
+                    译者序
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../../0_preface/0-1_second_edition_preface.html">
+            
+                <a href="../../0_preface/0-1_second_edition_preface.html">
+            
+                    
+                    第二版序
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../../0_preface/0-2_first_edition_preface.html">
+            
+                <a href="../../0_preface/0-2_first_edition_preface.html">
+            
+                    
+                    第一版序
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../../0_preface/0-3_summary_of_notation.html">
+            
+                <a href="../../0_preface/0-3_summary_of_notation.html">
+            
+                    
+                    标识一览
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../../1_introduction/1-0_overview.html">
+            
+                <a href="../../1_introduction/1-0_overview.html">
+            
+                    
+                    第一章 引言
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../../1_introduction/1-1_reinforcement_learning.html">
+            
+                <a href="../../1_introduction/1-1_reinforcement_learning.html">
+            
+                    
+                    1.1 强化学习
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../../1_introduction/1-2_examples.html">
+            
+                <a href="../../1_introduction/1-2_examples.html">
+            
+                    
+                    1.2 实例
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../../1_introduction/1-3_elements_of_rl.html">
+            
+                <a href="../../1_introduction/1-3_elements_of_rl.html">
+            
+                    
+                    1.3 强化学习的组成元素
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../../1_introduction/1-4_limitations_and_scope.html">
+            
+                <a href="../../1_introduction/1-4_limitations_and_scope.html">
+            
+                    
+                    1.4 范围与局限
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" data-path="../../1_introduction/1-5_an_extended_example.html">
+            
+                <a href="../../1_introduction/1-5_an_extended_example.html">
+            
+                    
+                    1.5 一个拓展实例: 井字棋
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="../../1_introduction/1-6_summary.html">
+            
+                <a href="../../1_introduction/1-6_summary.html">
+            
+                    
+                    1.6 总结
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7" data-path="../../1_introduction/1-7_early_history_of_rl.html">
+            
+                <a href="../../1_introduction/1-7_early_history_of_rl.html">
+            
+                    
+                    1.7 强化学习的早期历史
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8" data-path="../../1_introduction/1-8_bibliographical_remarks.html">
+            
+                <a href="../../1_introduction/1-8_bibliographical_remarks.html">
+            
+                    
+                    参考文献
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../-1-1_overview.html">
+            
+                <a href="../-1-1_overview.html">
+            
+                    
+                    第一部分 表格式解决方法
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="2-0_overview.html">
+            
+                <a href="2-0_overview.html">
+            
+                    
+                    第二章 多摇臂赌博机
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1.1" data-path="2-1_a_k-armd_bandit_problem.html">
+            
+                <a href="2-1_a_k-armd_bandit_problem.html">
+            
+                    
+                    2.1 k-摇臂赌博机问题
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.1.2" data-path="2-2_action-value_methods.html">
+            
+                <a href="2-2_action-value_methods.html">
+            
+                    
+                    2.2 动作值方法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.1.3" data-path="2-3_the_10-armed_testbed.html">
+            
+                <a href="2-3_the_10-armed_testbed.html">
+            
+                    
+                    2.3 10-摇臂测试工具
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.1.4" data-path="2-4_incremental_implementation.html">
+            
+                <a href="2-4_incremental_implementation.html">
+            
+                    
+                    2.4 增量式实现
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.1.5" data-path="2-5_tracking_a_nonstationary_problem.html">
+            
+                <a href="2-5_tracking_a_nonstationary_problem.html">
+            
+                    
+                    2.5 追踪非固定性问题
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.1.6" data-path="2-6_optimistic_initial_values.html">
+            
+                <a href="2-6_optimistic_initial_values.html">
+            
+                    
+                    2.6 乐观初始值
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.1.7" data-path="2-7_UCB_action_selection.html">
+            
+                <a href="2-7_UCB_action_selection.html">
+            
+                    
+                    2.7 上置信界动作选择
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.6.1.8" data-path="2-8_gradient_bandit_algorithm.html">
+            
+                <a href="2-8_gradient_bandit_algorithm.html">
+            
+                    
+                    2.8 梯度赌博机算法
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../../.." >2.8 梯度赌博机算法</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="28-&#x68AF;&#x5EA6;&#x8D4C;&#x535A;&#x673A;&#x7B97;&#x6CD5;">2.8 &#x68AF;&#x5EA6;&#x8D4C;&#x535A;&#x673A;&#x7B97;&#x6CD5;</h1>
+<p><link href="../../../css/style.css" rel="stylesheet">
+&#x5728;&#x672C;&#x7AE0;&#x7684;&#x4E4B;&#x524D;&#x90E8;&#x5206;, &#x6211;&#x4EEC;&#x5DF2;&#x7ECF;&#x5B66;&#x4E60;&#x4E86;&#x5BF9;&#x52A8;&#x4F5C;&#x503C;&#x8FDB;&#x884C;&#x4F30;&#x8BA1;, &#x7136;&#x540E;&#x4F7F;&#x7528;&#x4F30;&#x8BA1;&#x503C;&#x6765;&#x9009;&#x62E9;&#x52A8;&#x4F5C;&#x7684;&#x591A;&#x79CD;&#x65B9;&#x6CD5;. &#x8FD9;&#x5E38;&#x5E38;&#x662F;&#x4E00;&#x79CD;&#x597D;&#x7684;&#x9014;&#x5F84;, &#x4F46;&#x5E76;&#x4E0D;&#x662F;&#x552F;&#x4E00;&#x7684;&#x9014;&#x5F84;. &#x5728;&#x672C;&#x8282;&#x4E2D;, &#x6211;&#x4EEC;&#x5C06;&#x8003;&#x8651;&#x5982;&#x4F55;&#x4E3A;&#x6BCF;&#x4E00;&#x4E2A;&#x52A8;&#x4F5C;<script type="math/tex; ">a</script>&#x5B66;&#x5F97;&#x5404;&#x81EA;&#x5B9E;&#x6570;&#x578B;&#x7684;<em>&#x504F;&#x597D;</em>&lt;preference&gt;, &#x6211;&#x4EEC;&#x5C06;&#x5176;&#x8BB0;&#x4E3A;<script type="math/tex; ">H_t(a)</script>. &#x504F;&#x597D;&#x503C;&#x8D8A;&#x9AD8;, &#x90A3;&#x4E48;&#x5BF9;&#x5E94;&#x7684;&#x52A8;&#x4F5C;&#x8D8A;&#x5E38;&#x88AB;&#x91C7;&#x7528;, &#x4F46;&#x662F;&#x504F;&#x597D;&#x4E0D;&#x80FD;&#x4F7F;&#x7528;&#x5956;&#x8D4F;&#x7684;&#x89C2;&#x5FF5;&#x6765;&#x7406;&#x89E3;. &#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x52A8;&#x4F5C;&#x76F8;&#x5BF9;&#x4E8E;&#x53E6;&#x4E00;&#x4E2A;&#x52A8;&#x4F5C;&#x7684;&#x504F;&#x597D;&#x503C;&#x662F;&#x6709;&#x610F;&#x4E49;&#x7684;; &#x5982;&#x679C;&#x6211;&#x4EEC;&#x5C06;&#x6240;&#x6709;&#x52A8;&#x4F5C;&#x7684;&#x504F;&#x597D;&#x503C;&#x52A0;&#x4E0A;1000, &#x5404;&#x4E2A;&#x52A8;&#x4F5C;&#x88AB;&#x9009;&#x62E9;&#x7684;&#x6982;&#x7387;&#x4ECD;&#x7136;&#x4FDD;&#x6301;&#x4E0D;&#x53D8;, &#x5176;&#x4E2D;&#x6982;&#x7387;&#x662F;&#x7531;&#x5982;&#x4E0B;&#x7684;<em>soft-max&#x5206;&#x5E03;</em>(&#x4E5F;&#x79F0;&#x4E3A;Gibbs&#x5206;&#x5E03;&#x6216;Boltzmann&#x5206;&#x5E03;)&#x51B3;&#x5B9A;&#x7684;:
+<script type="math/tex; mode=display">
+\mathrm{Pr}\{A_t = a\} \doteq \frac{e^{H_t(a)}}{\sum_{b = 1}^{k} e^{H_t(b)}} \doteq \pi_t(a),
+\tag{2.11}
+</script>
+&#x5176;&#x4E2D;&#x6211;&#x4EEC;&#x5F15;&#x5165;&#x4E00;&#x79CD;&#x5B9E;&#x7528;&#x7684;&#x65B0;&#x6807;&#x8BB0;<script type="math/tex; ">\pi_t(a)</script>, &#x6765;&#x8868;&#x793A;&#x5728;&#x65F6;&#x95F4;<script type="math/tex; ">t</script>&#x91C7;&#x53D6;&#x52A8;&#x4F5C;<script type="math/tex; ">a</script>&#x7684;&#x53EF;&#x80FD;&#x6027;. &#x8D77;&#x59CB;&#x65F6;, &#x6240;&#x6709;&#x52A8;&#x4F5C;&#x7684;&#x504F;&#x597D;&#x503C;&#x90FD;&#x662F;&#x76F8;&#x7B49;&#x7684;(&#x5373;&#x5BF9;&#x6240;&#x6709;&#x7684;a&#x6765;&#x8BF4;, <script type="math/tex; ">H_1(a) = 0</script>), &#x56E0;&#x6B64;&#x6240;&#x6709;&#x52A8;&#x4F5C;&#x90FD;&#x6709;&#x76F8;&#x540C;&#x7684;&#x88AB;&#x9009;&#x62E9;&#x7684;&#x6982;&#x7387;.</p>
+<p><em>&#x7EC3;&#x4E60; 2.9</em>&#xA0; &#xA0; &#xA0; &#xA0;&#x8BC1;&#x660E;&#x5728;&#x53EA;&#x6709;&#x4E24;&#x4E2A;&#x52A8;&#x4F5C;&#x7684;&#x60C5;&#x51B5;&#x4E0B;, soft-max&#x5206;&#x5E03;, &#x548C;&#x7EDF;&#x8BA1;&#x5B66;&#x53CA;&#x4EBA;&#x5DE5;&#x795E;&#x7ECF;&#x7F51;&#x7EDC;&#x4E2D;&#x5E38;&#x7528;&#x7684;logistic&#x6216;sigmoid&#x51FD;&#x6570;&#x7ED9;&#x51FA;&#x7684;&#x5206;&#x5E03;&#x662F;&#x7B49;&#x4EF7;&#x7684;.<span class="float_right"><script type="math/tex; ">\square</script></span></p>
+<p>&#x57FA;&#x4E8E;&#x968F;&#x673A;&#x68AF;&#x5EA6;&#x4E0A;&#x5347;&lt;stochastic gradient ascent&gt;, &#x53EF;&#x4EE5;&#x81EA;&#x7136;&#x5730;&#x5F97;&#x5230;&#x8FD9;&#x4E00;&#x8BBE;&#x5B9A;&#x4E0B;&#x7684;&#x5B66;&#x4E60;&#x7B97;&#x6CD5;. &#x5728;&#x6BCF;&#x4E00;&#x6B65;&#x65F6;, &#x5728;&#x9009;&#x62E9;&#x52A8;&#x4F5C;<script type="math/tex; ">A_t</script>&#x5E76;&#x6536;&#x5230;&#x5956;&#x8D4F;<script type="math/tex; ">R_t</script>&#x540E;, &#x52A8;&#x4F5C;&#x504F;&#x597D;&#x503C;&#x4F7F;&#x7528;&#x4E0B;&#x5F0F;&#x8FDB;&#x884C;&#x66F4;&#x65B0;:
+<script type="math/tex; mode=display">
+\begin{align}
+H_{t + 1}(A_t) &\doteq H_t(A_t) + \alpha (R_t - \bar{R}_t)(1 - \pi_t(A_t)), &\text{且} \\
+H_{t + 1}(a) &\doteq H_t(a) - \alpha(R_t - \bar{R}_t) \pi_t(a), &\text{对所有的}a \neq A_t,
+\end{align}
+\tag{2.12}
+</script>
+&#x5176;&#x4E2D;<script type="math/tex; ">\alpha > 0</script>, &#x4E3A;&#x6B65;&#x957F;&#x53C2;&#x6570;, &#x4E14;<script type="math/tex; ">\bar{R}_t \in \mathbb{R}</script>, &#x4E3A;&#x65F6;&#x95F4;<script type="math/tex; ">t</script>&#x53CA;&#x4E4B;&#x524D;&#x6240;&#x6709;&#x5956;&#x8D4F;&#x7684;&#x5E73;&#x5747;, &#x53EF;&#x4EE5;&#x5982;<a href="to%20section2.4">&#x7B2C;2.4&#x8282;</a>(&#x5982;&#x679C;&#x95EE;&#x9898;&#x662F;&#x975E;&#x56FA;&#x5B9A;&#x6027;&#x7684;&#x8BDD;, &#x90A3;&#x4E48;&#x5982;<a href="to%20section2.5">&#x7B2C;2.5&#x8282;</a>)&#x4E2D;&#x6240;&#x8FF0;&#x7684;&#x90A3;&#x6837;&#x8FDB;&#x884C;&#x589E;&#x91CF;&#x5F0F;&#x7684;&#x8BA1;&#x7B97;. <script type="math/tex; ">\bar{R}_t</script>&#x8FD9;&#x4E00;&#x9879;&#x7684;&#x662F;&#x4F5C;&#x4E3A;&#x5956;&#x8D4F;&#x8FDB;&#x884C;&#x6BD4;&#x8F83;&#x7684;&#x57FA;&#x51C6;&#x7EBF;&#x7684;. &#x5982;&#x679C;&#x5956;&#x8D4F;&#x9AD8;&#x4E8E;&#x57FA;&#x51C6;&#x7EBF;, &#x90A3;&#x4E48;&#x5C06;&#x6765;&#x91C7;&#x53D6;&#x52A8;&#x4F5C;<script type="math/tex; ">A_t</script>&#x7684;&#x6982;&#x7387;&#x5C06;&#x589E;&#x52A0;; &#x53CD;&#x4E4B;&#x5982;&#x679C;&#x5956;&#x8D4F;&#x4F4E;&#x4E8E;&#x57FA;&#x51C6;&#x7EBF;, &#x90A3;&#x4E48;&#x6982;&#x7387;&#x5C06;&#x51CF;&#x5C0F;. &#x800C;&#x672A;&#x88AB;&#x9009;&#x62E9;&#x7684;&#x52A8;&#x4F5C;&#x671D;&#x76F8;&#x53CD;&#x65B9;&#x5411;&#x79FB;&#x52A8;.</p>
+<p><a href="to%20figure2.5">&#x56FE;2.5</a>&#x5C55;&#x793A;&#x4E86;&#x68AF;&#x5EA6;&#x8D4C;&#x535A;&#x673A;&#x7B97;&#x6CD5;&#x5728;10-&#x6447;&#x81C2;&#x6D4B;&#x8BD5;&#x5DE5;&#x5177;&#x7684;&#x53D8;&#x4F53;&#x4E0A;&#x7684;&#x7ED3;&#x679C;, &#x8BE5;&#x53D8;&#x4F53;&#x4E2D;&#x771F;&#x5B9E;&#x7684;&#x671F;&#x671B;&#x5956;&#x8D4F;&#x662F;&#x4ECE;&#x4E00;&#x5747;&#x503C;&#x4E3A;+4&#x800C;&#x975E;0(&#x65B9;&#x5DEE;&#x548C;&#x4ECE;&#x524D;&#x4E00;&#x6837;&#x4E3A;1)&#x7684;&#x6B63;&#x6001;&#x5206;&#x5E03;&#x4E2D;&#x91C7;&#x6837;&#x83B7;&#x5F97;&#x7684;. &#x6240;&#x6709;&#x5956;&#x8D4F;&#x7684;&#x540C;&#x65F6;&#x589E;&#x52A0;&#x5BF9;&#x68AF;&#x5EA6;&#x8D4C;&#x535A;&#x673A;&#x7B97;&#x6CD5;&#x7EDD;&#x5BF9;&#x6CA1;&#x6709;&#x5F71;&#x54CD;, &#x56E0;&#x4E3A;&#x5956;&#x8D4F;&#x7684;&#x57FA;&#x51C6;&#x7EBF;&#x4F1A;&#x7ACB;&#x5373;&#x9002;&#x5E94;&#x5230;&#x65B0;&#x7684;&#x6C34;&#x5E73;&#x4E0A;. &#x4F46;&#x5982;&#x679C;&#x57FA;&#x51C6;&#x7EBF;&#x88AB;&#x7701;&#x7565;&#x4E86;(&#x5373;&#x5982;&#x679C;<a href="to%20equation2.12">(2.12)</a>&#x4E2D;&#x7684;<script type="math/tex; ">\bar{R}_t</script>&#x6052;&#x53D6;0), &#x90A3;&#x4E48;&#x5176;&#x6027;&#x80FD;&#x5C06;&#x5982;&#x56FE;&#x4E2D;&#x6240;&#x793A;&#x7684;&#x6025;&#x5267;&#x9000;&#x5316;.</p>
+<p><img class="figure" id="figure2-5" src="../../../img/c2/s2-8/figure2-5.png"></p>
+<p><span class="figure_note">
+<b>&#x56FE;2.5</b>
+&#x5728;<script type="math/tex; ">q_*(a)</script>&#x63A5;&#x8FD1;+4&#x800C;&#x975E;0&#x7684;10-&#x6447;&#x81C2;&#x6D4B;&#x8BD5;&#x5DE5;&#x5177;&#x4E0A;, &#x6709;&#x6216;&#x8005;&#x6CA1;&#x6709;&#x5956;&#x8D4F;&#x57FA;&#x51C6;&#x7EBF;&#x7684;&#x68AF;&#x5EA6;&#x8D4C;&#x535A;&#x673A;&#x7B97;&#x6CD5;&#x7684;&#x5E73;&#x5747;&#x8868;&#x73B0;
+</span></p>
+<div class="math_box">
+<h4 id="&#x4F5C;&#x4E3A;&#x968F;&#x673A;&#x68AF;&#x5EA6;&#x4E0A;&#x5347;&#x7684;&#x68AF;&#x5EA6;&#x8D4C;&#x535A;&#x673A;&#x7B97;&#x6CD5;">&#x4F5C;&#x4E3A;&#x968F;&#x673A;&#x68AF;&#x5EA6;&#x4E0A;&#x5347;&#x7684;&#x68AF;&#x5EA6;&#x8D4C;&#x535A;&#x673A;&#x7B97;&#x6CD5;</h4>
+<pre>
+&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5C06;&#x68AF;&#x5EA6;&#x8D4C;&#x535A;&#x673A;&#x7B97;&#x6CD5;&#x7406;&#x89E3;&#x4E3A;&#x68AF;&#x5EA6;&#x4E0A;&#x5347;&#x7684;&#x968F;&#x673A;&#x8FD1;&#x4F3C;, &#x6765;&#x83B7;&#x5F97;&#x66F4;&#x6DF1;&#x5165;&#x7684;&#x7406;&#x89E3;. &#x5728;&#x5178;&#x578B;&#x7684;<i>&#x68AF;&#x5EA6;&#x4E0A;&#x5347;</i>&#x4E2D;, &#x5404;&#x4E2A;&#x52A8;&#x4F5C;&#x7684;&#x504F;&#x597D;&#x503C;<script type="math/tex; ">H_t(a)</script>&#x5C06;&#x4F1A;&#x6B63;&#x6BD4;&#x4E8E;&#x589E;&#x91CF;&#x5728;&#x8868;&#x73B0;&#x4E0A;&#x7684;&#x6548;&#x679C;&#x800C;&#x589E;&#x52A0;:
+<script type="math/tex; mode=display">
+H_{t + 1}(a) \doteq H_t(a) + \alpha \frac{\partial \mathbb{E}[R_t]}{\partial H_t(a)},
+\tag{2.13}\label{2.13}
+</script>
+&#x5176;&#x4E2D;&#x8868;&#x73B0;&#x7684;&#x5EA6;&#x91CF;&#x5373;&#x4E3A;&#x671F;&#x671B;&#x7684;&#x5956;&#x8D4F;:
+<script type="math/tex; mode=display">
+\mathbb{E}[R_t] = \sum_x \pi_t(x) q_*(x),
+</script>
+&#x4E14;&#x589E;&#x91CF;&#x7684;&#x6548;&#x679C;&#x7684;&#x5EA6;&#x91CF;&#x4E3A;: &#x8868;&#x73B0;&#x7684;&#x5EA6;&#x91CF;&#x76F8;&#x5BF9;&#x4E8E;&#x52A8;&#x4F5C;&#x504F;&#x597D;&#x503C;&#x7684;<i>&#x504F;&#x5BFC;&#x6570;</i>. &#x5F53;&#x7136;, &#x56E0;&#x4E3A;&#x5047;&#x8BBE;&#x4E0A;&#x6211;&#x4EEC;&#x4E0D;&#x77E5;&#x9053;<script type="math/tex; ">q_*(x)</script>, &#x6240;&#x4EE5;&#x4E0D;&#x53EF;&#x80FD;&#x5728;&#x73B0;&#x6709;&#x60C5;&#x51B5;&#x4E0B;&#x5B9E;&#x73B0;&#x5178;&#x578B;&#x7684;&#x68AF;&#x5EA6;&#x4E0A;&#x5347;, &#x4F46;&#x4E8B;&#x5B9E;&#x4E0A;&#x7B97;&#x6CD5;<a href="#mjx-eqn-2.12">(2.12)</a>&#x7684;
+
+</pre>
+</div>
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="2-7_UCB_action_selection.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 2.7 上置信界动作选择">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"2.8 梯度赌博机算法","level":"1.6.1.8","depth":3,"previous":{"title":"2.7 上置信界动作选择","level":"1.6.1.7","depth":3,"path":"src/2_tabular_solution_methods/2_multi-armd_bandits/2-7_UCB_action_selection.md","ref":"src/2_tabular_solution_methods/2_multi-armd_bandits/2-7_UCB_action_selection.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["mathjax","livereload"],"pluginsConfig":{"mathjax":{"forceSVG":false,"version":"2.6-latest"},"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"src/2_tabular_solution_methods/2_multi-armd_bandits/2-8_gradient_bandit_algorithm.md","mtime":"2018-07-25T08:51:18.794Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-07-25T08:51:18.745Z"},"basePath":"../../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../../gitbook/gitbook.js"></script>
+    <script src="../../../gitbook/theme.js"></script>
+    
+        
+        <script src="https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-mathjax/plugin.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
